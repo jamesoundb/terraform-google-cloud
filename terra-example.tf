@@ -17,7 +17,7 @@ data "template_file" "vault-config" {
 resource "null_resource" "berks_package" {
   # asuming this is run from a cookbook/terraform directory
   provisioner "local-exec" {
-    command = "rm -f ${path.module}/cookbooks.tar.gz ; berks package ${path.module}/cookbooks.tar.gz --berksfile=../Berksfile"
+    command = "rm -f ${path.module}/cookbooks.tar.gz ; berks package ${path.module}/cookbooks.tar.gz --berksfile=Berksfile"
   }
 }
 
