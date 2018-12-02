@@ -24,6 +24,9 @@ resource "aws_instance" "example" {
     ]
   }
 }
-output "address" {
+output "hostname" {
   value = "${aws_instance.example.public_dns}"
+}
+output "address" {
+  value = "${aws_instance.example.public_ip}"
 }
