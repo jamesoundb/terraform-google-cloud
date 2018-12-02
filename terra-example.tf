@@ -18,7 +18,8 @@ resource "aws_instance" "example" {
     private_key = "${file("/home/nickapos/.ssh/ec2-keys.pem")}"
   }
     inline = [
-      "echo $HOSTMNA<E",
+      "echo $HOSTNAME",
+      "sudo yum -y update",
       "echo 'blah'> /tmp/blah",
     ]
   }
