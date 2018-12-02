@@ -10,4 +10,16 @@ resource "aws_instance" "example" {
   ami           = "ami-00846a67"
   instance_type = "t2.micro"
   key_name= "ec2-keys"
+  provisioner "remote-exec" {
+  connection {
+    type = "ssh"
+    user = "centos"
+    agent = "true"
+    private_key = "${file("/home/nickapos/.ssh/ec2-keys.pem")}"
+  }
+    inline = [
+      "echo $HOSTMNA<E",
+      "echo 'blah'> /tmp/blah",
+    ]
+  }
 }
