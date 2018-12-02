@@ -24,3 +24,6 @@ resource "aws_instance" "example" {
     ]
   }
 }
+output "address" {
+  value = "${aws_instance.example.public_dns}"
+}
