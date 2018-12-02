@@ -1,17 +1,15 @@
 data "template_file" "dna" {
   template = "${file("chef-execution.json.tpl")}"
-
   vars {
     version = "0.11.4"
-    address = "${aws_instance.example.public_ip}"
+    address = "0.0.0.0"
     recipe = "hashicorp-vault::default"
   }
 }
-
 data "template_file" "vault-config" {
   template = "${file("config.json.tpl")}"
   vars {
-    address = "${aws_instance.example.public_ip}"
+    address = "0.0.0.0"
   }
 }
 
