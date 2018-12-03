@@ -81,8 +81,6 @@ resource "aws_instance" "example" {
       "echo 'Creating vault data dir' && sudo mkdir /opt/vault-data && sudo chown vault:vault /opt/vault-data",
       "sudo mv /tmp/config.json /etc/vault/vault.json",
       "sudo systemctl restart vault"
-
-
     ]
   }
   depends_on = ["null_resource.berks_package"]
