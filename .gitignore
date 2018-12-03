@@ -2,3 +2,5 @@
 .terraform/*
 *backup
 *tfstate
+Berksfile.lock
+cookbooks.tgz
