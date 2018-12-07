@@ -22,59 +22,44 @@ resource "null_resource" "berks_package" {
 }
 
 
-variable "access_key" {}
-variable "secret_key" {}
-provider "aws" {
-  access_key = "${var.access_key}"
-  secret_key = "${var.secret_key}"
-  region     = "eu-west-2"
+provider "google" {
+  credentials = "${file("/home/nickapos/.config/gcloud/legacy_credentials/nickapos@gmail.com/adc.json")}"
+  region     = "europe-west2"
 }
 
-resource "aws_instance" "example" {
-  ami           = "ami-00846a67"
-  instance_type = "t2.micro"
-  key_name= "ec2-keys"
+resource "google_compute_instance" "example" {
+  project = "terraform-experiments"
+  zone = "europe-west2-a"
+  name = "tf-example"
+  machine_type = "f1.micro"
+  boot_disk {
+    initialize_params {
+      image="centos-7"
+    }
+  }
+
+  network_interface {
+   network = "default"
+   access_config {
+   }
+ }
 
 
   provisioner "file" {
-    connection {
-      type = "ssh"
-      user = "centos"
-      agent = "true"
-      private_key = "${file("/home/nickapos/.ssh/ec2-keys.pem")}"
-    }
     source      = "${path.module}/cookbooks.tar.gz"
     destination = "/tmp/cookbooks.tar.gz"
   }
   provisioner "file" {
-    connection {
-      type = "ssh"
-      user = "centos"
-      agent = "true"
-      private_key = "${file("/home/nickapos/.ssh/ec2-keys.pem")}"
-    }
     content = "${data.template_file.vault-config.rendered}"
     destination = "/tmp/config.json"
   }
 
   provisioner "file" {
-    connection {
-      type = "ssh"
-      user = "centos"
-      agent = "true"
-      private_key = "${file("/home/nickapos/.ssh/ec2-keys.pem")}"
-    }
     content = "${data.template_file.dna.rendered}"
     destination = "/tmp/dna.json"
   }
 
   provisioner "remote-exec" {
-    connection {
-      type = "ssh"
-      user = "centos"
-      agent = "true"
-      private_key = "${file("/home/nickapos/.ssh/ec2-keys.pem")}"
-    }
     inline = [
       "curl -LO https://www.chef.io/chef/install.sh && sudo bash ./install.sh",
       "sudo chef-solo --recipe-url /tmp/cookbooks.tar.gz -j /tmp/dna.json",
@@ -84,10 +69,4 @@ resource "aws_instance" "example" {
     ]
   }
   depends_on = ["null_resource.berks_package"]
-}
-output "hostname" {
-  value = "${aws_instance.example.public_dns}"
-}
-output "address" {
-  value = "${aws_instance.example.public_ip}"
 }
