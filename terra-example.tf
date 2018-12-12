@@ -31,7 +31,7 @@ resource "google_compute_instance" "example" {
   project = "terraform-experiments"
   zone = "europe-west2-a"
   name = "tf-example"
-  machine_type = "f1.micro"
+  machine_type = "f1-micro"
   boot_disk {
     initialize_params {
       image="centos-7"
