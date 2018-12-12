@@ -32,6 +32,15 @@ resource "google_compute_instance" "example" {
   zone = "europe-west2-a"
   name = "tf-example"
   machine_type = "f1-micro"
+  connection {
+    type        = "ssh"
+    agent       = true
+    user        = "nickapos"
+    port        = "22"
+    timeout     = "5m"
+    private_key = "${file("~/.ssh/google_compute_engine")}"
+  }
+
   boot_disk {
     initialize_params {
       image="centos-7"
